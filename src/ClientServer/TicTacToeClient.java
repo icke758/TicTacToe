@@ -6,15 +6,20 @@ import TicTacToe.Board;
 
 
 public class TicTacToeClient {
-    private static final String SERVER_ADDRESS = "127.0.0.1"; // Change to server's IP
     private static final int PORT = 12345;
 
     public static void main(String[] args) {
-        try (Socket socket = new Socket(SERVER_ADDRESS, PORT);
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the server IP address: ");
+        String serverAddress = scanner.nextLine();
+
+        try (Socket socket = new Socket(serverAddress, PORT);
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
 
-            Scanner scanner = new Scanner(System.in);
+            scanner = new Scanner(System.in);
             while (true) {
                 // Receive the board state and whose turn it is
                 Board board = (Board) in.readObject();
