@@ -1,3 +1,5 @@
+import ClientServer.TicTacToeClient;
+import ClientServer.TicTacToeServer;
 import TicTacToe.Board;
 import TicTacToe.Match;
 import TicTacToe.Player;
@@ -11,14 +13,41 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Board board = new Board();
 
-        Map<String, String> names = Menu.PlayerNames();
+        System.out.println("Choose game mode:");
+        System.out.println("1. Local Play");
+        System.out.println("2. Host LAN Game");
+        System.out.println("3. Join LAN Game");
+        int gameMode = scanner.nextInt();
 
-        System.out.println("Player 1 = X");
-        System.out.println("Player 2 = O");
+        Player player1 = null;
+        Player player2 = null;
 
-        Player player1 = new Player(names.get("Player1"), 0, 'X');
-        Player player2 = new Player(names.get("Player2"), 0, 'O');
+        switch (gameMode) {
+            case 1: // Local Play
+                Map<String, String> names = Menu.PlayerNames();
+                player1 = new Player(names.get("Player1"), 0, 'X');
+                player2 = new Player(names.get("Player2"), 0, 'O');
+                initializeLocalMatch(player1, player2, board, scanner);
+                break;
+            case 2:
+                System.out.println("Starting server...");
+                new Thread(() -> TicTacToeServer.main(new String[]{})).start();
+                System.out.println("Aguardando acesso do cliente...");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            case 3:
+                TicTacToeClient.main(new String[]{});
+                break;
+            default:
+                System.out.println("Valor invalido");
+                break;
+        }
+    }
 
+    private static void initializeLocalMatch(Player player1, Player player2, Board board, Scanner scanner){
         boolean isX = (player1.getTeam() == 'X');
         while (true) {
             Match.Initialize(board, isX, scanner, player1, player2);
