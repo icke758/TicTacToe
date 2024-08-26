@@ -1,9 +1,14 @@
 package TicTacToe;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Isso e uma implementaçao de um algoritimo super eficaz de verificaçao de vitoria, derrota ou empate no jogo da velha. Fonte: https://stackoverflow.com/questions/1056316/algorithm-for-determining-tic-tac-toe-game-over
  */
-public class Board {
+public class Board implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     // Bitboard values for each position on the Tic Tac Toe board
     private static final int A1 = 0x80080080;
     private static final int A2 = 0x40008000;
@@ -35,30 +40,40 @@ public class Board {
     public boolean makeMove(int position, boolean isX) {
         int moveValue = getMoveValue(position);
         if ((xBoard & moveValue) != 0 || (oBoard & moveValue) != 0) {
-            return false; // Invalid move, position already taken
+            return true; // Invalid move, position already taken
         }
         if (isX) {
             xBoard |= moveValue;
         } else {
             oBoard |= moveValue;
         }
-        return true;
+        return false;
     }
 
     // Get the move value for the given position
     private int getMoveValue(int position) {
-        return switch (position) {
-            case 0 -> A1;
-            case 1 -> A2;
-            case 2 -> A3;
-            case 3 -> B1;
-            case 4 -> B2;
-            case 5 -> B3;
-            case 6 -> C1;
-            case 7 -> C2;
-            case 8 -> C3;
-            default -> throw new IllegalArgumentException("Invalid position");
-        };
+        switch (position) {
+            case 0:
+                return A1;
+            case 1:
+                return A2;
+            case 2:
+                return A3;
+            case 3:
+                return B1;
+            case 4:
+                return B2;
+            case 5:
+                return B3;
+            case 6:
+                return C1;
+            case 7:
+                return C2;
+            case 8:
+                return C3;
+            default:
+                throw new IllegalArgumentException("Invalid position");
+        }
     }
 
     public void reset() {

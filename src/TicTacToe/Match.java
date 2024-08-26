@@ -19,7 +19,7 @@ public class Match {
             System.out.println("Turno do jogador: " + (isX ? 'X' : 'O'));
             int position = scanner.nextInt();
 
-            if (!board.makeMove(position, isX)) {
+            if (board.makeMove(position, isX)) {
                 System.out.println("Movimento invalido");
                 continue;
             }
